@@ -1,0 +1,36 @@
+# some notes on running the proejct from scratch on IDE Cloud9 environment
+
+Stage 1 - Setup the environment
+    1. login to cloud9 environment
+    2. create a new directory
+    3. git clone https://github.com/colmoc/k8smicroservicesapp.git
+    4. check makefile and run 'make setup' if neccessary, this should be:
+    	python3 -m venv ~/.devops
+    	source ~/.devops/bin/activate
+    5. run 'which python3' to check you have your virtual environment setup
+
+Stage 2 - Develop the app
+    1. develop the app in this environment - app.py in this case already done
+    2. create a makefile to deal with dependencies used and linting, and testing
+    3. ensure you reference a requirement.txt file for packages / dependencies
+    4. test the app by running locally on a port if neccessary
+
+Stage 3 - Save the app to Docker Image and upload to Repo
+    1. Create a docker file, which defines image, copies app, exposes port, and starts app
+    2. test by running 'run_docker.sh' - this builds and starts the docker image locally, test app works on image
+    3. upload the docker image to dockerhub by running 'upload_docker.sh'
+    
+Stage 4 - Run the docker image on a K8 cluster
+    1. minikube start
+    2. run 'run_kubernetes.sh' // basically creates k8 cluster and deploys image onto it
+    3. retest app 
+    
+Next steps:
+- run image on AWS EKS cluster
+- update with circleci so that your app is being pushed with the equivalent makefile linting / testing on a docker image
+- create a separate branch to do the CD part
+    - upload new image to dockerhub
+    - push image to k8 cluster in a blue / green fashion
+
+    
+    

@@ -53,7 +53,7 @@ jobs:
       - run:
           name: Install tar gzip ansible utility
           command: |
-            apk add --update docker
+            apk add --update docker openrc
             apk add --update ansible
             apk add --update tar
             apk add --update gzip

@@ -2,13 +2,8 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-executors:
- docker-publisher: 
- environment:
- IMAGE_NAME: colmoconchuir/mytestimg:v1.0.0
- auth:
- username: $DOCKERHUB_USERNAME
- password: $DOCKERHUB_PASSWORD
+version: 2.1
+
 
 jobs:
   build:
@@ -55,6 +50,7 @@ jobs:
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+          
     steps:
       - checkout
       - setup_remote_docker:

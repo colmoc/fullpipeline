@@ -34,3 +34,11 @@ jobs:
           command: |
             . venv/bin/activate
             make lint
+      - run:
+          name: build docker
+          command: |
+            . venv/bin/activate
+            docker build --tag=house .
+            docker image ls
+            docker run -p 8000:80 house
+

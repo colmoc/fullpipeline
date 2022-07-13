@@ -57,9 +57,9 @@ jobs:
           version: 20.10.14
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build -t colmoconchuir/capApp:$TAG .
+          docker build -t colmoconchuir/capapp:$TAG .
           echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-          docker push colmoconchuir/capApp:$TAG
+          docker push colmoconchuir/capapp:$TAG
 
 deploy-app:
     docker:
@@ -95,17 +95,11 @@ deploy-app:
           paths:
             - inventory.txt
       - run:
-          name: Install dependencies
-          command: |
-            apk add --update ansible
-      - attach_workspace:
-          at: ~/
-      - run:
           name: Configure server using Ansible 'configure-server.yml'
           command: |
             cat ~/inventory.txt
             cd .circleci/ansible
-            ansible-playbook -i ~/inventory.txt configure-server.yml         
+            ansible-playbook -i ~/inventory.txt configure-server.yml      
             
              
 workflows:
@@ -115,5 +109,6 @@ workflows:
      # - build:
     #      requires: [deploy-infrastructure]
       - build-push-docker
-          #requires: [build]
+      - deploy-app:
+          requires: [build-push-docker]
             

@@ -51,7 +51,10 @@ jobs:
             
   configure-infrastructure:
     docker:
-      — image: circleci/node:latest  
+      - image: cimg/go:1.17
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - setup_remote_docker:

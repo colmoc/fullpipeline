@@ -67,5 +67,12 @@ jobs:
           name: CHECK VERSIONS
           command: docker version
      
-
+workflows:
+  default:
+    jobs:
+     # - deploy-infrastructure
+     # - build:
+    #      requires: [deploy-infrastructure]
+      - configure-infrastructure
+          #requires: [build]
             

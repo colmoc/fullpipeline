@@ -2,7 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
 
 jobs:
   build:
@@ -37,8 +37,35 @@ jobs:
       - run:
           name: build docker
           command: |
-            . venv/bin/activate
-            docker build --tag=house .
-            docker image ls
-            docker run -p 8000:80 house
+          # . venv/bin/activate
+          # docker build --tag=house .
+          # docker image ls
+          # docker run -p 8000:80 house
 
+            
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["49:94:01:d8:4a:94:6e:b5:48:3e:2a:a1:cf:f7:67:ae"]
+      - run:
+          name: Install tar gzip ansible utility
+          command: |
+            apk add --update ansible
+            apk add --update tar
+            apk add --update gzip
+            apk add --no-cache \
+                python3 \
+                py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install --no-cache-dir \
+                awscli \
+            && rm -rf /var/cache/apk/*
+      - run:
+          name: CHECK VERSIONS
+          command: docker version
+     
+
+            

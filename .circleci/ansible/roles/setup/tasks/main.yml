@@ -1,0 +1,29 @@
+---
+- name: "testing"
+  shell: |
+    ls -l
+    pwd
+    cd /home/ec2-user/
+    mkdir testdir
+    cd testdir
+    touch testfile.txt
+    whoami > testfile.txt
+
+- name: "deploy application to k8"
+  shell: |
+    ls -l
+    kubectl create namespace test
+    dockerpath=colmoconchuir/houseimg:v1.0.1
+    kubectl create deployment python-housek8s-test --image=$dockerpath -n=test
+    kubectl expose deployment python-housek8s-test --type=LoadBalancer --port=8000 --target-port=80 -n=test
+    touch /tmp/test6
+    kubectl get svc -n=test > /tmp/test6
+    
+
+    
+    
+
+#- name: "get results"
+#  shell: |
+#    cd /home/ec2-user/environment/k8smicroservicesapp_aws
+#    ./make_prediction.sh >> /home/ec2-user/testdir/testfile.txt

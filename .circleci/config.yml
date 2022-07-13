@@ -61,6 +61,8 @@ jobs:
             echo “$DOCKERHUB_PASSWORD” | docker login -u “$DOCKERHUB_USERNAME” — password-stdin
             docker build -t myTestIMG .
             docker push colmoconchuir/myTestIMG
+            
+            
              
 workflows:
   default:

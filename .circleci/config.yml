@@ -2,7 +2,13 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2.1
+executors:
+ docker-publisher: 
+ environment:
+ IMAGE_NAME: colmoconchuir/mytestimg:v1.0.0
+ auth:
+ username: $DOCKERHUB_USERNAME
+ password: $DOCKERHUB_PASSWORD
 
 jobs:
   build:
@@ -45,31 +51,17 @@ jobs:
             
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      — image: circleci/node:latest  
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints: ["49:94:01:d8:4a:94:6e:b5:48:3e:2a:a1:cf:f7:67:ae"]
-      - run:
-          name: Install tar gzip ansible utility
+      — setup_remote_docker
+      — run: 
+          name: Publish Docker Image to Docker Hub
           command: |
-            apk add --update docker openrc
-            apk add --update ansible
-            apk add --update tar
-            apk add --update gzip
-            apk add --no-cache \
-                python3 \
-                py3-pip \
-            && pip3 install --upgrade pip \
-            && pip3 install --no-cache-dir \
-                awscli \
-            && rm -rf /var/cache/apk/*
-      - run:
-          name: CHECK VERSIONS
-          command: |
-            service docker start
-            docker version
-     
+            echo “$DOCKERHUB_PASSWORD” | docker login -u “$DOCKERHUB_USERNAME” — password-stdin
+            docker build -t $IMAGE_NAME .
+            docker push $IMAGE_NAME:la
+             
 workflows:
   default:
     jobs:

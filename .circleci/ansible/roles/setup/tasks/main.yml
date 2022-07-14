@@ -18,8 +18,7 @@
     kubectl expose deployment python-housek8s-test --type=LoadBalancer --port=8000 --target-port=80 -n=test
     touch /tmp/test6
     kubectl get svc -n=test > /tmp/test6
-    
-
+    kubectl set image deployment/python-housek8s-prod houseimg=colmoconchuir/capapp:0.1.23 -n=production
     
     
 

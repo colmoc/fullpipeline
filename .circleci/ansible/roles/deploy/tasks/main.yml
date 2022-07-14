@@ -2,7 +2,7 @@
   shell: |
     ls -l
     kubectl create namespace production-{{ buildnumber }}
-    dockerpath=colmoconchuir/capapp:0.1.23
+    dockerpath=colmoconchuir/capapp:0.1.{{ buildnumber }}
     kubectl create deployment python-housek8s-production-{{ buildnumber }} --image=$dockerpath -n=production-{{ buildnumber }}
     kubectl expose deployment python-housek8s-production-{{ buildnumber }} --type=LoadBalancer --port=8000 --target-port=80 -n=production-{{ buildnumber }}
     touch /tmp/test7

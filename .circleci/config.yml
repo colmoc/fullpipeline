@@ -147,8 +147,9 @@ workflows:
       #- deploy-infrastructure
      # - build:
     #      requires: [deploy-infrastructure]
-    #  - build-push-docker
+      - build-push-docker
       #- deploy-app:
       #    requires: [build-push-docker]
-      - update-app
+      - update-app:
+          requires: [build-push-docker]
             

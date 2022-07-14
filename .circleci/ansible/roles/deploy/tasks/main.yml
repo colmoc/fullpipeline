@@ -2,7 +2,6 @@
   shell: |
     ls -l
     kubectl set image deployment/python-housek8s-prod houseimg=colmoconchuir/capapp:0.1.23 -n=production
-    echo "{{ my_other_variable }}"
 
 - name: print message
   ansible.builtin.debug:

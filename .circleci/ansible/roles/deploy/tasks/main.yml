@@ -7,8 +7,13 @@
     kubectl expose deployment python-housek8s-production-{{ buildnumber }} --type=LoadBalancer --port=8000 --target-port=80 -n=production-{{ buildnumber }}
     touch /tmp/test7
     kubectl get svc -n=production-{{ buildnumber }} > /tmp/test7
+    sleep 20
     
-    
+- name: "get ELB URL"
+  shell: |
+    touch /tmp/URL
+    echo kubectl get svc -n=production-{{ buildnumber }} | awk '{print $4}' | awk '(NR>1)'
+    kubectl get svc -n=production-{{ buildnumber }}| awk '{print $4}' | awk '(NR>1)' > /tmp/URL
 
 - name: print message
   ansible.builtin.debug:

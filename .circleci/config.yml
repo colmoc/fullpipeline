@@ -141,15 +141,52 @@ jobs:
             cat ~/inventory.txt
             cd .circleci/ansible
             ansible-playbook -i ~/inventory.txt configure-server.yml --extra-vars="buildnumber=${CIRCLE_WORKFLOW_ID:0:2}"
+deploy-app:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["49:94:01:d8:4a:94:6e:b5:48:3e:2a:a1:cf:f7:67:ae"]
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+                python3 \
+                py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install --no-cache-dir \
+                awscli \
+            && rm -rf /var/cache/apk/*
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=aws-cloud9-myDevops-4c83fde84ae342bab3bed24c0cb7e4a3" \
+              --output text >> ~/inventory.txt
+            cat ~/inventory.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - inventory.txt
+      - run:
+          name: Configure server using Ansible 'configure-server.yml'
+          command: |
+            cat ~/inventory.txt
+  
+            
+            
 workflows:
   default:
     jobs:
       #- deploy-infrastructure
      # - build:
     #      requires: [deploy-infrastructure]
-      - build-push-docker
+
       #- deploy-app:
       #    requires: [build-push-docker]
+      - build-push-docker
       - update-app:
           requires: [build-push-docker]
             

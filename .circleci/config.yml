@@ -109,5 +109,5 @@ workflows:
     #      requires: [deploy-infrastructure]
       - build-push-docker
       #- deploy-app:
-          requires: [build-push-docker]
+      #    requires: [build-push-docker]
             

@@ -28,12 +28,6 @@
     - myTestVAR: "{{ lookup('env', 'myTestVAR')}}"
     
 
-- name: "PRINT VARS"
-  shell: |
-    ls -l
-    echo "{{ my_other_variable }}"
-
-
   roles:
     # - setup
     - deploy

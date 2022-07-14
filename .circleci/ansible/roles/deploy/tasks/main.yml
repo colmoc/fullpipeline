@@ -2,7 +2,6 @@
     repository: https://github.com/nicgirault/cinelocal-api.git
     path: /home/ubuntu/www
     image: nicgirault/cinelocal-api
-    myTestVAR: "{{ lookup('env', 'myTestVAR')}}"
 - name: "rolling update to K8"
   shell: |
     ls -l

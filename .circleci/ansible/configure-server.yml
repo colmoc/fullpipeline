@@ -11,7 +11,7 @@
     - ansible_host_key_checking: false
     - ansible_stdout_callback: yaml
     - my_version: "{{ version }}"
-    - my_other_variable: "{{ other_variable }}""
+    - my_other_variable: "{{ other_variable }}"
 
 
   pre_tasks:

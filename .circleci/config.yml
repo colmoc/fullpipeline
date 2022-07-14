@@ -140,7 +140,7 @@ jobs:
           command: |
             cat ~/inventory.txt
             cd .circleci/ansible
-            ansible-playbook -i ~/inventory.txt configure-server.yml  
+            ansible-playbook -i ~/inventory.txt configure-server.yml --extra-vars="fruit=apple"
 workflows:
   default:
     jobs:

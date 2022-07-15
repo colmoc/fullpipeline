@@ -76,9 +76,13 @@ jobs:
             && pip3 install --no-cache-dir \
                 awscli \
             && rm -rf /var/cache/apk/*
-            curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.6/bin/linux/amd64/kubectl
-            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-            echo kubectl version
+            apt-get update
+            apt-get install -y apt-transport-https ca-certificates curl
+            curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+            echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+            apt-get update
+            apt-get install -y kubectl
+            echo kubectl version --client
       - run:
           name: Update kubconfig
           command: |

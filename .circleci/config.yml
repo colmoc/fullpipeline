@@ -85,7 +85,9 @@ jobs:
           name: Update kubconfig
           command: |
             aws eks --region us-east-2 update-kubeconfig --name elcapo
-            kubectl get pods -n=production
+            aws sts get-caller-identity
+            echo ~/.kube/config
+        #  kubectl get pods -n=production
       - run:
           name: Update pods with new image
           command: |

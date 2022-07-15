@@ -70,19 +70,17 @@ jobs:
           name: Install dependencies
           command: |
             apk add --no-cache \
+                curl \
                 python3 \
                 py3-pip \
             && pip3 install --upgrade pip \
             && pip3 install --no-cache-dir \
                 awscli \
             && rm -rf /var/cache/apk/*
-            apt-get update
-            apt-get install -y apt-transport-https ca-certificates curl
-            curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-            echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
-            apt-get update
-            apt-get install -y kubectl
-            echo kubectl version --client
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.6/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mv ./kubectl /usr/local/bin/kubectl
+            kubectl version --client
       - run:
           name: Update kubconfig
           command: |

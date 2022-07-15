@@ -19,4 +19,7 @@
   ansible.builtin.debug:
     msg: "WORKFLOW ID is {{ buildnumber }}"
     
-        
+- name: LoadBalancer
+  shell: |
+    echo "ELB is: "
+    cat /tmp/URL

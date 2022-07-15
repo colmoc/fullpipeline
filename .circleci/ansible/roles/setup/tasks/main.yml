@@ -9,16 +9,10 @@
     touch testfile.txt
     whoami > testfile.txt
 
-- name: "deploy application to k8"
+- name: "deploy EKS"
   shell: |
     ls -l
-    kubectl create namespace test
-    dockerpath=colmoconchuir/houseimg:v1.0.1
-    kubectl create deployment python-housek8s-test --image=$dockerpath -n=test
-    kubectl expose deployment python-housek8s-test --type=LoadBalancer --port=8000 --target-port=80 -n=test
-    touch /tmp/test6
-    kubectl get svc -n=test > /tmp/test6
-    kubectl set image deployment/python-housek8s-prod houseimg=colmoconchuir/capapp:0.1.23 -n=production
+    eksctl create cluster --name production-{{ buildnumber }} --region=us-west-2 --nodes=2 --node-type t3.medium  
     
     
 

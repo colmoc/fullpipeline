@@ -60,7 +60,37 @@ jobs:
           docker build -t colmoconchuir/capapp:$TAG .
           echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
           docker push colmoconchuir/capapp:$TAG
+ 
+ test-update-app:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+                python3 \
+                py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install --no-cache-dir \
+                awscli \
+            && rm -rf /var/cache/apk/*
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.6/bin/linux/amd64/kubectl
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            echo kubectl version
+      - run:
+          name: Update kubconfig
+          command: |
+            aws eks --region us-east-1 update-kubeconfig --name elcapo
+            kubectl get pods -n=production
+      - run:
+          name: Update pods with new image
+          command: |
+            ls -ls
+            pwd
 
+            
   deploy-app:
     docker:
       - image: python:3.7-alpine3.11
@@ -186,7 +216,8 @@ workflows:
 
       #- deploy-app:
       #    requires: [build-push-docker]
-      - build-push-docker
-      - update-app:
-          requires: [build-push-docker]
+      - test-update-app
+      #- build-push-docker
+      #- update-app:
+      #    requires: [build-push-docker]
             
